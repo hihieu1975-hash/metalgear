@@ -565,6 +565,7 @@ header p { margin-top: 6px; font-size: 1.1rem; opacity: 0.85; }
 <div id="login-screen" style="
   position:fixed; inset:0; z-index:9999;
   display:flex; align-items:center; justify-content:center;
+  transition: opacity 0.3s;
   background:linear-gradient(135deg, #0f0a1e 0%, #1a0a2e 50%, #0a0f1e 100%);
 ">
   <!-- bg particles -->
@@ -1613,21 +1614,21 @@ window.addEventListener('load', () => {
 });
 window._onAuthChange = function(user) {
   if (user) {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('login-screen').style.visibility = 'hidden';
-        document.getElementById('login-screen').style.zIndex = '-1';
+    const ls = document.getElementById('login-screen');
+    ls.style.opacity = '0';
+    ls.style.pointerEvents = 'none';
+    ls.style.zIndex = '-1';
+    ls.style.display = 'none';
+    ls.style.visibility = 'hidden';
     document.getElementById('main-app').style.display = 'block';
-
     memberName = user.name || user.email;
     localStorage.setItem('member_name', memberName);
     document.getElementById('display-name').textContent = memberName;
-
     if (user.photo) {
       const av = document.getElementById('user-avatar');
       av.src = user.photo;
       av.style.display = 'block';
     }
-
     if (window._fbReady) {
       const { db, ref, set } = window._fb;
       set(ref(db, 'users/' + user.uid), {
@@ -1638,7 +1639,12 @@ window._onAuthChange = function(user) {
       });
     }
   } else {
-    document.getElementById('login-screen').style.display = 'flex';
+    const ls = document.getElementById('login-screen');
+    ls.style.opacity = '1';
+    ls.style.pointerEvents = '';
+    ls.style.zIndex = '9999';
+    ls.style.display = 'flex';
+    ls.style.visibility = 'visible';
     document.getElementById('main-app').style.display = 'none';
   }
 };
