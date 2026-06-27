@@ -1112,20 +1112,20 @@ header p { margin-top: 6px; font-size: 1.1rem; opacity: 0.85; }
   // Watch auth state
   // Watch auth state
 onAuthStateChanged(auth, user => {
-  setTimeout(() => {
-    if (user) {
-      window._currentUser = {
-        uid:   user.uid,
-        name:  user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-      };
-      document.dispatchEvent(new CustomEvent('auth-change', { detail: { user: window._currentUser } }));
-    } else {
-      window._currentUser = null;
-      document.dispatchEvent(new CustomEvent('auth-change', { detail: { user: null } }));
-    }
-  }, 100);
+  if (user) {
+    window._currentUser = {
+      uid:   user.uid,
+      name:  user.displayName,
+      email: user.email,
+      photo: user.photoURL,
+    };
+  } else {
+    window._currentUser = null;
+  }
+  // Gọi thẳng thay vì dùng event
+  if (typeof window._onAuthChange === 'function') {
+    window._onAuthChange(window._currentUser);
+  }
 });
 
   window._fbReady = true;
@@ -1611,27 +1611,21 @@ window.addEventListener('load', () => {
     authorBody.style.height = '0px';
   }
 });
-/* ===== AUTH ===== */
-document.addEventListener('auth-change', e => {
-  const user = e.detail.user;
+window._onAuthChange = function(user) {
   if (user) {
-    // Show app, hide login
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('main-app').style.display = 'block';
 
-    // Set display name from Google account
     memberName = user.name || user.email;
     localStorage.setItem('member_name', memberName);
     document.getElementById('display-name').textContent = memberName;
 
-    // Show avatar
     if (user.photo) {
       const av = document.getElementById('user-avatar');
       av.src = user.photo;
       av.style.display = 'block';
     }
 
-    // Save user profile to Firebase
     if (window._fbReady) {
       const { db, ref, set } = window._fb;
       set(ref(db, 'users/' + user.uid), {
@@ -1642,12 +1636,10 @@ document.addEventListener('auth-change', e => {
       });
     }
   } else {
-    // Logged out → show login screen
     document.getElementById('login-screen').style.display = 'flex';
     document.getElementById('main-app').style.display = 'none';
   }
-});
-
+};
 /* ===== FIREBASE SYNC ===== */
 window._leaderboard = {};
 
