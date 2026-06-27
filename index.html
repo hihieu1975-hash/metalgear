@@ -1614,6 +1614,8 @@ window.addEventListener('load', () => {
 window._onAuthChange = function(user) {
   if (user) {
     document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('login-screen').style.visibility = 'hidden';
+        document.getElementById('login-screen').style.zIndex = '-1';
     document.getElementById('main-app').style.display = 'block';
 
     memberName = user.name || user.email;
