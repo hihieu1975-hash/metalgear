@@ -586,28 +586,62 @@ header p { margin-top: 6px; font-size: 1.1rem; opacity: 0.85; }
       VÌ MỘT VIỆT NAM THỊNH VƯỢNG
     </div>
 
-    <div style="height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent); margin-bottom:32px;"></div>
+    <div style="height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent); margin-bottom:28px;"></div>
 
-    <button onclick="window._auth && window._auth.signIn()" id="btn-google-login" style="
-      width:100%; padding:14px 20px;
-      display:flex; align-items:center; justify-content:center; gap:12px;
-      background:white; border:none; border-radius:14px;
-      font-size:0.95rem; font-weight:700; color:#1f1f1f;
-      cursor:pointer; letter-spacing:0.01em;
-      box-shadow:0 4px 20px rgba(0,0,0,0.3);
-      transition:transform 0.15s, box-shadow 0.15s;
-    " onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 28px rgba(0,0,0,0.4)'"
-       onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(0,0,0,0.3)'">
-      <svg width="20" height="20" viewBox="0 0 48 48">
-        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-      </svg>
-      Đăng nhập với Google
-    </button>
+    <!-- Tabs -->
+    <div style="display:flex; background:rgba(255,255,255,0.07); border-radius:12px; padding:4px; margin-bottom:24px;">
+      <button id="tab-login" onclick="switchTab('login')" style="flex:1; padding:10px; border:none; border-radius:9px; background:rgba(255,255,255,0.15); color:white; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.2s;">Đăng nhập</button>
+      <button id="tab-register" onclick="switchTab('register')" style="flex:1; padding:10px; border:none; border-radius:9px; background:transparent; color:rgba(255,255,255,0.45); font-weight:600; font-size:0.85rem; cursor:pointer; transition:all 0.2s;">Đăng ký</button>
+    </div>
 
-    <div style="font-size:0.7rem; color:rgba(255,255,255,0.2); margin-top:24px; line-height:1.6;">
+    <!-- Form đăng nhập -->
+    <div id="form-login">
+      <input id="login-email" type="email" placeholder="Email" style="
+        width:100%; padding:13px 16px; margin-bottom:12px;
+        background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+        border-radius:12px; color:white; font-size:0.9rem; outline:none; box-sizing:border-box;
+      ">
+      <input id="login-password" type="password" placeholder="Mật khẩu" style="
+        width:100%; padding:13px 16px; margin-bottom:8px;
+        background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+        border-radius:12px; color:white; font-size:0.9rem; outline:none; box-sizing:border-box;
+      ">
+      <div id="login-error" style="color:#ff6b6b; font-size:0.78rem; margin-bottom:12px; min-height:18px;"></div>
+      <button onclick="doLogin()" style="
+        width:100%; padding:14px; border:none; border-radius:12px;
+        background:linear-gradient(135deg,#6366f1,#8b5cf6);
+        color:white; font-weight:700; font-size:0.95rem; cursor:pointer;
+        box-shadow:0 4px 20px rgba(99,102,241,0.4); transition:transform 0.15s;
+      " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">Đăng nhập</button>
+    </div>
+
+    <!-- Form đăng ký -->
+    <div id="form-register" style="display:none;">
+      <input id="reg-name" type="text" placeholder="Tên hiển thị" style="
+        width:100%; padding:13px 16px; margin-bottom:12px;
+        background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+        border-radius:12px; color:white; font-size:0.9rem; outline:none; box-sizing:border-box;
+      ">
+      <input id="reg-email" type="email" placeholder="Email" style="
+        width:100%; padding:13px 16px; margin-bottom:12px;
+        background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+        border-radius:12px; color:white; font-size:0.9rem; outline:none; box-sizing:border-box;
+      ">
+      <input id="reg-password" type="password" placeholder="Mật khẩu (tối thiểu 6 ký tự)" style="
+        width:100%; padding:13px 16px; margin-bottom:8px;
+        background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+        border-radius:12px; color:white; font-size:0.9rem; outline:none; box-sizing:border-box;
+      ">
+      <div id="reg-error" style="color:#ff6b6b; font-size:0.78rem; margin-bottom:12px; min-height:18px;"></div>
+      <button onclick="doRegister()" style="
+        width:100%; padding:14px; border:none; border-radius:12px;
+        background:linear-gradient(135deg,#10b981,#059669);
+        color:white; font-weight:700; font-size:0.95rem; cursor:pointer;
+        box-shadow:0 4px 20px rgba(16,185,129,0.4); transition:transform 0.15s;
+      " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">Tạo tài khoản</button>
+    </div>
+
+    <div style="font-size:0.7rem; color:rgba(255,255,255,0.2); margin-top:20px; line-height:1.6;">
       Bằng cách đăng nhập, bạn đồng ý với điều khoản sử dụng<br>hệ thống điều khiển nhà thông minh này.
     </div>
   </div>
@@ -1046,7 +1080,7 @@ header p { margin-top: 6px; font-size: 1.1rem; opacity: 0.85; }
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getDatabase, ref, set, get, push, onValue, update, remove }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-  import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged }
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut, onAuthStateChanged }
     from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
   const firebaseConfig = {
@@ -1062,18 +1096,18 @@ header p { margin-top: 6px; font-size: 1.1rem; opacity: 0.85; }
   const app      = initializeApp(firebaseConfig);
   const db       = getDatabase(app);
   const auth     = getAuth(app);
-  const provider = new GoogleAuthProvider();
-
   // Expose to global
   window._fb = { ref, set, get, push, onValue, update, remove, db };
   window._auth = {
     auth,
-    signIn: () => signInWithRedirect(auth, provider),
     signOut: () => signOut(auth),
   };
 
-  // Handle redirect result after returning from Google
-  getRedirectResult(auth).catch(err => console.error('Redirect error:', err));
+  // Expose auth functions
+  window._doLogin = (email, password) => signInWithEmailAndPassword(auth, email, password);
+  window._doRegister = (email, password, name) =>
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(cred => updateProfile(cred.user, { displayName: name }));
 
   // Watch auth state
   onAuthStateChanged(auth, user => {
@@ -1558,6 +1592,7 @@ renderComments();
 renderSchedule();
 updateWeather();
 setInterval(updateWeather, 300000);
+maybeShowWeeklyRank();
 
 // Init accordion heights after DOM renders
 window.addEventListener('load', () => {
@@ -1862,5 +1897,64 @@ function maybeShowWeeklyRank() {
 
 </div> <!-- /#main-app -->
 
+<script>
+function switchTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('form-login').style.display = isLogin ? '' : 'none';
+  document.getElementById('form-register').style.display = isLogin ? 'none' : '';
+  document.getElementById('tab-login').style.background = isLogin ? 'rgba(255,255,255,0.15)' : 'transparent';
+  document.getElementById('tab-login').style.color = isLogin ? 'white' : 'rgba(255,255,255,0.45)';
+  document.getElementById('tab-register').style.background = isLogin ? 'transparent' : 'rgba(255,255,255,0.15)';
+  document.getElementById('tab-register').style.color = isLogin ? 'rgba(255,255,255,0.45)' : 'white';
+}
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.textContent = '';
+  if (!email || !password) { errEl.textContent = 'Vui lòng nhập đầy đủ thông tin.'; return; }
+  try {
+    await window._doLogin(email, password);
+  } catch(e) {
+    const msgs = {
+      'auth/user-not-found': 'Email không tồn tại.',
+      'auth/wrong-password': 'Sai mật khẩu.',
+      'auth/invalid-email': 'Email không hợp lệ.',
+      'auth/invalid-credential': 'Email hoặc mật khẩu không đúng.',
+    };
+    errEl.textContent = msgs[e.code] || 'Đăng nhập thất bại: ' + e.message;
+  }
+}
+
+async function doRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const errEl = document.getElementById('reg-error');
+  errEl.textContent = '';
+  if (!name || !email || !password) { errEl.textContent = 'Vui lòng nhập đầy đủ thông tin.'; return; }
+  if (password.length < 6) { errEl.textContent = 'Mật khẩu tối thiểu 6 ký tự.'; return; }
+  try {
+    await window._doRegister(email, password, name);
+  } catch(e) {
+    const msgs = {
+      'auth/email-already-in-use': 'Email này đã được đăng ký.',
+      'auth/invalid-email': 'Email không hợp lệ.',
+      'auth/weak-password': 'Mật khẩu quá yếu.',
+    };
+    errEl.textContent = msgs[e.code] || 'Đăng ký thất bại: ' + e.message;
+  }
+}
+
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  if (document.getElementById('form-login').style.display !== 'none' &&
+      document.activeElement?.closest('#form-login')) doLogin();
+  if (document.getElementById('form-register').style.display !== 'none' &&
+      document.activeElement?.closest('#form-register')) doRegister();
+});
+</script>
 </body>
 </html>
