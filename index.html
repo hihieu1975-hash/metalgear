@@ -1110,9 +1110,10 @@ header p { margin-top: 6px; font-size: 1.1rem; opacity: 0.85; }
       .then(cred => updateProfile(cred.user, { displayName: name }));
 
   // Watch auth state
-  onAuthStateChanged(auth, user => {
+  // Watch auth state
+onAuthStateChanged(auth, user => {
+  setTimeout(() => {
     if (user) {
-      // Logged in
       window._currentUser = {
         uid:   user.uid,
         name:  user.displayName,
@@ -1124,7 +1125,8 @@ header p { margin-top: 6px; font-size: 1.1rem; opacity: 0.85; }
       window._currentUser = null;
       document.dispatchEvent(new CustomEvent('auth-change', { detail: { user: null } }));
     }
-  });
+  }, 100);
+});
 
   window._fbReady = true;
   document.dispatchEvent(new Event('firebase-ready'));
